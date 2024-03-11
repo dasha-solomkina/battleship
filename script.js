@@ -1,4 +1,4 @@
-class Ship {
+export class Ship {
   constructor(length) {
     this.length = length;
     this.hit = [];
@@ -20,7 +20,7 @@ const threeShip = new Ship(3);
 const ships = [fiveShip, fourShip, threeShip];
 
 const SIZE = 10;
-class Gameboard {
+export class Gameboard {
   constructor() {
     this.board = [];
     this.missedShots = [];
