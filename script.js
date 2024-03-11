@@ -1,15 +1,15 @@
 class Ship {
   constructor(length) {
     this.length = length;
-    this.hit = 0;
+    this.hit = [];
     this.sunk = false;
   }
-  toHit() {
-    return this.hit++;
+  toHit(arr) {
+    return this.hit.push(arr);
   }
   isSunk() {
-    if (this.hit === this.length) {
-      return true;
+    if (this.hit.length === this.length) {
+      return (this.sunk = true);
     }
   }
 }
@@ -17,6 +17,7 @@ class Ship {
 const fiveShip = new Ship(5);
 const fourShip = new Ship(4);
 const threeShip = new Ship(3);
+const ships = [fiveShip, fourShip, threeShip];
 
 const SIZE = 10;
 class Gameboard {
@@ -44,6 +45,37 @@ class Gameboard {
       } else {
         this.board[x][y + i] = ship;
       }
+    }
+  }
+
+  receiveAttack(x, y) {
+    if (this.missedShots[x][y] == true) {
+      return false;
+    }
+    if (this.board[x][y] == null) {
+      this.missedShots[x][y] = true;
+    } else {
+      let ship = this.board[x][y];
+      const alreadyShot = ship.hit.some(
+        (sub) => JSON.stringify(sub) === JSON.stringify([x, y])
+      );
+      if (alreadyShot) return false;
+      ship.toHit([x, y]);
+      ship.isSunk();
+    }
+  }
+
+  isAllShipSunk(shipsArr) {
+    let count = 0;
+    for (const ship of shipsArr) {
+      if (ship.sunk) {
+        count += 1;
+      }
+    }
+    if (count === shipsArr.length) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
